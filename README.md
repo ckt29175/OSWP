@@ -1,2 +1,3 @@
 # OSWP
-Stuff for OSWP Exam - Try harder ^^
+Stuff for "WaiFu" course - Try harder ^^
+This is "WaiFu" material
