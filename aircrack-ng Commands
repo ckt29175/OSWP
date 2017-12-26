@@ -1,0 +1,22 @@
+auditing wireless networks
+
+airmon-ng - see if detect chipset/drivers
+
+airmon-ng check - check if any proccess is problematic
+airmon-ng check kill - kill the proccess
+
+airmon-ng start wlan0 - start monitor mode
+airmon-ng stop mon0 - stop monitor mode
+
+packet capture 
+can track location geographiclly of the access points
+
+airodump-ng mon0 - sniffing on mon0
+
+airodump-ng -c <channel> --bssid <AP MAC> -w <filename> <interface name>    -   start sniffing specific parameters
+
+Injection Test:
+aireplay-ng -9 mon0  - Single card
+
+aireplay-ng -9 -i (revieving card wlan1) (mon0)
+
